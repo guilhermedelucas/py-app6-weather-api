@@ -3,10 +3,13 @@ import pandas
 
 app = Flask(__name__)
 
+stations = pandas.read_csv(f"data_small/stations.txt", skiprows=16)
+stations.rename(columns={'STANAME                                 ': 'STANAME' }, inplace=True)
+stations = stations[['STAID', 'STANAME']]
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return render_template("home.html", data=stations.to_html())
 
 
 @app.route("/api/v1/<station>/<date>")
